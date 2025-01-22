@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
-import type { Schema } from "../amplify/data/resource";
+import React, { useState, useEffect } from 'react';
 import { generateClient } from "aws-amplify/data";
+import Speedometer from './components/Speedometer';
 
 const client = generateClient<Schema>();
 
 function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
+  const [speed, setSpeed] = useState(0);
 
   useEffect(() => {
     client.models.Todo.observeQuery().subscribe({
@@ -33,6 +34,8 @@ function App() {
           Review next step of this tutorial.
         </a>
       </div>
+      <Speedometer value={speed} />
+      <button onClick={() => setSpeed((prev) => (prev + 10) % 200)}>Increase Speed</button>
     </main>
   );
 }
